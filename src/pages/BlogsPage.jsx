@@ -47,33 +47,46 @@ export default function BlogsPage() {
   }, [params]);
 
   return (
-    <div style={{ padding: 20, textAlign: 'left' }}>
-      <h1>Blogs</h1>
-
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 16 }}>
-        <input
-          value={search}
-          onChange={(e) => {
-            setPage(1);
-            setSearch(e.target.value);
-          }}
-          placeholder="Search title/content"
-          style={{ padding: 10, borderRadius: 8, border: '1px solid #e5e4e7', flex: '1 1 220px' }}
-        />
-        <input
-          value={category}
-          onChange={(e) => {
-            setPage(1);
-            setCategory(e.target.value);
-          }}
-          placeholder="Category"
-          style={{ padding: 10, borderRadius: 8, border: '1px solid #e5e4e7', flex: '0 0 180px' }}
-        />
-        <select value={limit} onChange={(e) => { setPage(1); setLimit(Number(e.target.value)); }} style={{ padding: 10, borderRadius: 8 }}>
-          {[5,10,20,50].map((n) => (
-            <option key={n} value={n}>{n} / page</option>
-          ))}
-        </select>
+    <div>
+      <div className="d-flex align-items-center justify-content-between gap-2 flex-wrap mb-3">
+        <h1 className="m-0">Blogs</h1>
+        <div className="d-flex gap-2 flex-wrap">
+          <input
+            value={search}
+            onChange={(e) => {
+              setPage(1);
+              setSearch(e.target.value);
+            }}
+            placeholder="Search title/content"
+            className="form-control"
+            style={{ width: 260 }}
+          />
+          <input
+            value={category}
+            onChange={(e) => {
+              setPage(1);
+              setCategory(e.target.value);
+            }}
+            placeholder="Category"
+            className="form-control"
+            style={{ width: 200 }}
+          />
+          <select
+            value={limit}
+            onChange={(e) => {
+              setPage(1);
+              setLimit(Number(e.target.value));
+            }}
+            className="form-select"
+            style={{ width: 160 }}
+          >
+            {[5, 10, 20, 50].map((n) => (
+              <option key={n} value={n}>
+                {n} / page
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <ErrorBox message={error} />
@@ -81,20 +94,37 @@ export default function BlogsPage() {
       {loading ? (
         <Loader />
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+        <div className="row g-3">
           {blogs.map((b) => (
-            <div key={b._id} style={{ border: '1px solid #e5e4e7', borderRadius: 12, padding: 14 }}>
-              <h3 style={{ marginTop: 0 }}>{b.title}</h3>
-              <p style={{ marginBottom: 10, color: '#6b6375' }}>{b.category}</p>
-              <img src={b.image} alt="" style={{ width: '100%', maxHeight: 220, objectFit: 'cover', borderRadius: 10 }} />
-              <p style={{ marginTop: 10 }}>{(b.content || '').slice(0, 160)}{(b.content||'').length>160?'...':''}</p>
+            <div key={b._id} className="col-12 col-md-6 col-lg-4">
+              <div className="card h-100 shadow-sm">
+                {b.image ? (
+                  <img
+                    src={b.image}
+                    className="card-img-top"
+                    alt={b.title}
+                    style={{ height: 220, objectFit: 'cover' }}
+                  />
+                ) : null}
+                <div className="card-body">
+                  <h5 className="card-title">{b.title}</h5>
+                  <div className="text-muted mb-2">{b.category}</div>
+                  <p className="card-text">
+                    {(b.content || '').slice(0, 160)}
+                    {(b.content || '').length > 160 ? '...' : ''}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       )}
 
-      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+      <div className="mt-4">
+        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+      </div>
     </div>
   );
 }
+
 
