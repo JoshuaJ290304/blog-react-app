@@ -9,6 +9,20 @@ import AdminDashboardPage from './pages/AdminDashboardPage';
 function RouteShim() {
   const [path, setPath] = useState(window.location.pathname);
 
+  const isActive = (p) => path === p;
+
+  const linkStyle = (p) => ({
+    color: 'inherit',
+    textDecoration: 'none',
+    opacity: isActive(p) ? 1 : 0.75,
+    fontWeight: isActive(p) ? 700 : 500,
+    padding: '8px 10px',
+    borderRadius: 10,
+    border: isActive(p) ? '1px solid rgba(170, 59, 255, 0.5)' : '1px solid transparent',
+    background: isActive(p) ? 'rgba(170, 59, 255, 0.12)' : 'transparent',
+  });
+
+
   useEffect(() => {
     const onPop = () => setPath(window.location.pathname);
     window.addEventListener('popstate', onPop);
